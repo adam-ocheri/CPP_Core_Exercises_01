@@ -6,11 +6,24 @@ int PassByValue(int Number)
 	return Number;
 }
 
-int PassByReference(int& Number)
+int& PassByReference(int& Number)
 {
 	Number = Number * Number;
 	return Number;
 }
+
+void InitializePointer(int* ptr, int value)
+{
+	ptr = new int(value);
+
+}
+int* CreateNewPointer(int value)
+{
+	int* ptr = new int(value);
+	return ptr;
+}
+
+//  ____________________________________________________________________________________________________________________________________________
 
 void BasicPointers()
 {
@@ -26,6 +39,8 @@ void BasicPointers()
 	delete MyNumberPtr; // cleanup
 
 }
+
+//  ____________________________________________________________________________________________________________________________________________
 
 void StaticArray()
 {
@@ -45,13 +60,17 @@ void DynamicArray()
 	std::cout << "<-| Arrays VS Pointers - Dynamic Array |->" << std::endl;
 
 	int i = 0; // loop counter!
-	int* MyDynamicArray = new int[8]; // eight adjacent memory blocks reserved
+	int ArrayLength = 8;
+
+	int* MyDynamicArray = new int[ArrayLength]; // [0, 0, 0, 0, 0, 0, 0, 0] ["Maor"]
 	int* CurrentIndex = MyDynamicArray;
-	while (CurrentIndex < MyDynamicArray + 8)
+
+
+	while (CurrentIndex < MyDynamicArray + ArrayLength)
 	{
 		*CurrentIndex = i * 64;
-		std::cout << "LOG: the pointer's address:" << CurrentIndex << std::endl;
-		std::cout << "LOG: the pointer's value:" << *CurrentIndex << std::endl;
+		std::cout << "LOG: the pointer's address: " << CurrentIndex << std::endl;
+		std::cout << "LOG: the pointer's value: " << *CurrentIndex << std::endl;
 		++CurrentIndex;
 		++i;
 	}
@@ -59,26 +78,82 @@ void DynamicArray()
 	delete[] MyDynamicArray; // cleanup
 }
 
+int* CreateDynamicArray(int maxLength)
+{
+	int* arrayPtr = new int[maxLength];
+
+	return arrayPtr;
+}
+
+int* IncreaseDynamicArraySize(int* arrayPtr, int currentSize, int resizeFactor)
+{
+	int i = 0;
+
+	int newSize = currentSize + resizeFactor;
+	int* newArrayPtr = new int[newSize]; //creating a new array with the requested size
+
+	//copy items
+	for (i = 0; i < currentSize; i++)
+	{
+		newArrayPtr[i] = arrayPtr[i];
+	}
+
+	// clean `arrayPtr`
+	delete arrayPtr;
+
+	// steal the pointer
+	arrayPtr = newArrayPtr;
+	newArrayPtr = nullptr;
+
+	return arrayPtr;
+}
+
+//  ____________________________________________________________________________________________________________________________________________
+
+
+
+
+
+
+
+
+
+
+
+
 int main()
 {
-	
+
 	//PassByValue - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-	int A = 42;
-	int B = PassByValue(A);
-	/*  
+	//int A = 42;
+	//int B = PassByValue(A);
+	//std::cout << A << "\n" << B << std::endl;
+	/*
 		A == B ?
 	*/
 
 	//PassByReference - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-	int X = 42;
-	int Y = PassByReference(X);
+	//int X = 42;
+	//int& Y = PassByReference(X);
+	//Y += 6;
+	//std::cout << X << " " << Y << " " << std::endl;
 	/*
 		X == Y ?
 		int Z = Y; Z == X ?
 	*/
+	//int Z = Y;
+	//Z += 5;
 
 	//BasicPointers - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-	BasicPointers();
+	//BasicPointers();
+	//int* myPtr;
+	//InitializePointer(myPtr, 42);
+	//int* myNewPtr = CreateNewPointer(42);
+	//...
+	// after a lot of code and stuff....
+	//delete myPtr;
+	//delete myNewPtr;
+
 	/*
 		void InitializePointer(int* ptr, int value)
 		{
@@ -94,7 +169,7 @@ int main()
 	*/
 
 	//ArraysVsPointers - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-	StaticArray();
+	//StaticArray();
 	/*
 		int CreateStaticArray(int maxLength)
 		{
@@ -102,7 +177,8 @@ int main()
 		}
 	*/
 
-	DynamicArray();
+	//DynamicArray();
+	int* myDynamicArray = IncreaseDynamicArraySize(8);
 	/*
 		int* CreateDynamicArray(int maxLength)
 		{
